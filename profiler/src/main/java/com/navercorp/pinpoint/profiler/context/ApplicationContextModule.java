@@ -173,6 +173,7 @@ public class ApplicationContextModule extends AbstractModule {
         bind(StorageFactory.class).toProvider(StorageFactoryProvider.class).in(Scopes.SINGLETON);
 
         bindServiceComponent();
+        bindServiceComponent();
 
         bind(DataSourceMonitorRegistryService.class).toProvider(DataSourceMonitorRegistryServiceProvider.class).in(Scopes.SINGLETON);
 

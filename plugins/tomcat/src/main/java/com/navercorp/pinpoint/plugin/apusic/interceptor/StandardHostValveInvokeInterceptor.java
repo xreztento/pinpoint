@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.navercorp.pinpoint.plugin.tomcat.interceptor;
+package com.navercorp.pinpoint.plugin.apusic.interceptor;
 
 import java.util.Enumeration;
 

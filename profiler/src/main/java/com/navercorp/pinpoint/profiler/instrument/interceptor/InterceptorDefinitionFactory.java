@@ -206,7 +206,7 @@ public class InterceptorDefinitionFactory {
 //            }
             // search all class
             try {
-                return interceptorClazz.getMethod(searchMethodName, searchMethodParameter);
+                    return interceptorClazz.getMethod(searchMethodName, searchMethodParameter);
             } catch (NoSuchMethodException ex) {
                 logger.debug(searchMethodName +" DeclaredMethod not found.");
             }

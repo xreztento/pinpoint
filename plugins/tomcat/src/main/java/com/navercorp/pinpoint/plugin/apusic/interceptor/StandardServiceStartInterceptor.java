@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-package com.navercorp.pinpoint.plugin.tomcat.interceptor;
+package com.navercorp.pinpoint.plugin.apusic.interceptor;
 
 import com.navercorp.pinpoint.bootstrap.context.ServerMetaDataHolder;
-import org.apache.catalina.connector.Connector;
+import org.apache.catalina.util.ServerInfo;
 
 import com.navercorp.pinpoint.bootstrap.context.TraceContext;
 import com.navercorp.pinpoint.bootstrap.interceptor.AroundInterceptor;
@@ -26,21 +26,22 @@ import com.navercorp.pinpoint.bootstrap.logging.PLoggerFactory;
 
 /**
  * @author emeroad
+ * @author hyungil.jeong
  */
-public class ConnectorInitializeInterceptor implements AroundInterceptor {
+public class StandardServiceStartInterceptor implements AroundInterceptor {
 
-    private PLogger logger = PLoggerFactory.getLogger(this.getClass());
+    private final PLogger logger = PLoggerFactory.getLogger(this.getClass());
     private final boolean isDebug = logger.isDebugEnabled();
 
-    private TraceContext traceContext;
-    
-    public ConnectorInitializeInterceptor(TraceContext traceContext) {
-        this.traceContext = traceContext;
+    private final TraceContext traceContext;
+
+    public StandardServiceStartInterceptor(TraceContext context) {
+        this.traceContext = context;
     }
 
     @Override
     public void before(Object target, Object[] args) {
-
+        // Do nothing
     }
 
     @Override
@@ -48,11 +49,10 @@ public class ConnectorInitializeInterceptor implements AroundInterceptor {
         if (isDebug) {
             logger.afterInterceptor(target, args, result, throwable);
         }
-        if (target instanceof Connector) {
-            final Connector connector = (Connector) target;
-            ServerMetaDataHolder holder = this.traceContext.getServerMetaDataHolder();
-            holder.addConnector(connector.getProtocol(), connector.getPort());
-            holder.notifyListeners();
-        }
+
+        String serverInfo = ServerInfo.getServerInfo();
+        ServerMetaDataHolder holder = this.traceContext.getServerMetaDataHolder();
+        holder.setServerName(serverInfo);
+        holder.notifyListeners();
     }
 }

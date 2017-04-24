@@ -71,6 +71,9 @@
     <properties>
         <encoding>UTF-8</encoding>
         <jdk.version>1.6</jdk.version>
+        <env.JAVA_6_HOME>/usr/lib/jvm/java-1.6.0-openjdk-1.6.0.41.x86_64/</env.JAVA_6_HOME>
+        <env.JAVA_7_HOME>/usr/lib/jvm/java-1.7.0-openjdk-1.7.0.91-2.6.2.3.el7.x86_64/</env.JAVA_7_HOME>
+        <env.JAVA_8_HOME>/usr/lib/jvm/java-1.8.0-openjdk-1.8.0.65-3.b17.el7.x86_64/</env.JAVA_8_HOME>
         <jdk.home>${env.JAVA_6_HOME}</jdk.home>
         <test.jdk.home>${jdk.home}</test.jdk.home>
         <slf4j.version>1.7.21</slf4j.version>
@@ -853,21 +856,21 @@
                         </goals>
                         <configuration>
                             <rules>
-                                <requireMavenVersion>
-                                    <version>3.2</version>
-                                </requireMavenVersion>
-                                <requireJavaVersion>
-                                    <version>1.7</version>
-                                </requireJavaVersion>
-                                <requireEnvironmentVariable>
-                                    <variableName>JAVA_6_HOME</variableName>
-                                </requireEnvironmentVariable>
-                                <requireEnvironmentVariable>
-                                    <variableName>JAVA_7_HOME</variableName>
-                                </requireEnvironmentVariable>
-                                <requireEnvironmentVariable>
-                                    <variableName>JAVA_8_HOME</variableName>
-                                </requireEnvironmentVariable>
+                                <!--<requireMavenVersion>-->
+                                    <!--<version>3.2</version>-->
+                                <!--</requireMavenVersion>-->
+                                <!--<requireJavaVersion>-->
+                                    <!--<version>1.7</version>-->
+                                <!--</requireJavaVersion>-->
+                                <!--<requireEnvironmentVariable>-->
+                                    <!--<variableName>JAVA_6_HOME</variableName>-->
+                                <!--</requireEnvironmentVariable>-->
+                                <!--<requireEnvironmentVariable>-->
+                                    <!--<variableName>JAVA_7_HOME</variableName>-->
+                                <!--</requireEnvironmentVariable>-->
+                                <!--<requireEnvironmentVariable>-->
+                                    <!--<variableName>JAVA_8_HOME</variableName>-->
+                                <!--</requireEnvironmentVariable>-->
                             </rules>
                             <fail>true</fail>
                         </configuration>
@@ -945,19 +948,19 @@
 
     <reporting>
         <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-jxr-plugin</artifactId>
-                <inherited>false</inherited>
-                <configuration>
-                    <aggregate>true</aggregate>
-                    <inputEncoding>${encoding}</inputEncoding>
-                    <outputEncoding>${encoding}</outputEncoding>
-                    <windowTitle>Pinpoint ${project.version} Cross Reference</windowTitle>
-                    <docTitle>Pinpoint ${project.version} Cross Reference</docTitle>
-                </configuration>
-                <version>2.5</version>
-            </plugin>
+            <!--<plugin>-->
+                <!--<groupId>org.apache.maven.plugins</groupId>-->
+                <!--<artifactId>maven-jxr-plugin</artifactId>-->
+                <!--<inherited>false</inherited>-->
+                <!--<configuration>-->
+                    <!--<aggregate>true</aggregate>-->
+                    <!--<inputEncoding>${encoding}</inputEncoding>-->
+                    <!--<outputEncoding>${encoding}</outputEncoding>-->
+                    <!--<windowTitle>Pinpoint ${project.version} Cross Reference</windowTitle>-->
+                    <!--<docTitle>Pinpoint ${project.version} Cross Reference</docTitle>-->
+                <!--</configuration>-->
+                <!--<version>2.5</version>-->
+            <!--</plugin>-->
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>findbugs-maven-plugin</artifactId>
@@ -1026,28 +1029,28 @@
             </properties>
         </profile>
 
-        <profile>
-            <id>klocwork</id>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>com.klocwork.ps</groupId>
-                        <artifactId>kwmaven</artifactId>
-                        <version>2.1.1</version>
-                        <configuration>
-                            <buildspec_filename>${KWINJECT_OUT_PATH}</buildspec_filename>
-                        </configuration>
-                        <executions>
-                            <execution>
-                                <phase>validate</phase>
-                                <goals>
-                                    <goal>run</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
+        <!--<profile>-->
+            <!--<id>klocwork</id>-->
+            <!--<build>-->
+                <!--<plugins>-->
+                    <!--<plugin>-->
+                        <!--<groupId>com.klocwork.ps</groupId>-->
+                        <!--<artifactId>kwmaven</artifactId>-->
+                        <!--<version>2.1.1</version>-->
+                        <!--<configuration>-->
+                            <!--<buildspec_filename>${KWINJECT_OUT_PATH}</buildspec_filename>-->
+                        <!--</configuration>-->
+                        <!--<executions>-->
+                            <!--<execution>-->
+                                <!--<phase>validate</phase>-->
+                                <!--<goals>-->
+                                    <!--<goal>run</goal>-->
+                                <!--</goals>-->
+                            <!--</execution>-->
+                        <!--</executions>-->
+                    <!--</plugin>-->
+                <!--</plugins>-->
+            <!--</build>-->
+        <!--</profile>-->
     </profiles>
 </project>
