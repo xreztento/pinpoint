@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.navercorp.pinpoint.plugin.apusic.interceptor;
+package com.navercorp.pinpoint.plugin.tomcat.interceptor;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -44,7 +44,7 @@ import com.navercorp.pinpoint.bootstrap.logging.PLoggerFactory;
 public class WebappLoaderStartInterceptor implements AroundInterceptor {
 
     private final PLogger logger = PLoggerFactory.getLogger(this.getClass());
-    
+
     private final TraceContext traceContext;
 
     public WebappLoaderStartInterceptor(TraceContext traceContext) {
@@ -74,7 +74,7 @@ public class WebappLoaderStartInterceptor implements AroundInterceptor {
             logger.warn("Webapp loader is not an instance of org.apache.catalina.loader.WebappLoader. Found [{}]", target.getClass().toString());
         }
     }
-    
+
     private String extractContextKey(WebappLoader webappLoader) {
         final String defaultContextName = "";
         try {
@@ -106,7 +106,7 @@ public class WebappLoaderStartInterceptor implements AroundInterceptor {
     private Container extractContext(WebappLoader webappLoader) throws IllegalArgumentException, IllegalAccessException, InvocationTargetException {
         Method m;
         try {
-            // Tomcat 6, 7 - org.apache.catalina.loader.getContainer() 
+            // Tomcat 6, 7 - org.apache.catalina.loader.getContainer()
             m = webappLoader.getClass().getDeclaredMethod("getContainer");
         } catch (NoSuchMethodException e1) {
             try {
@@ -123,7 +123,7 @@ public class WebappLoaderStartInterceptor implements AroundInterceptor {
         }
         return null;
     }
-    
+
     private List<String> extractLibJars(WebappLoader webappLoader) {
         ClassLoader classLoader = webappLoader.getClassLoader();
         if (classLoader instanceof URLClassLoader) {
@@ -133,9 +133,9 @@ public class WebappLoaderStartInterceptor implements AroundInterceptor {
         } else {
             logger.warn("Webapp class loader is not an instance of URLClassLoader. Found [{}]", classLoader.getClass().toString());
             return Collections.emptyList();
-        } 
+        }
     }
-    
+
     private List<String> extractLibJarNamesFromURLs(URL[] urls) {
         if (urls == null) {
             return Collections.emptyList();
@@ -157,7 +157,7 @@ public class WebappLoaderStartInterceptor implements AroundInterceptor {
         }
         return libJarNames;
     }
-    
+
     private String extractLibJarName(URI uri) {
         String jarName = uri.toString();
         if (jarName == null) {
@@ -170,7 +170,7 @@ public class WebappLoaderStartInterceptor implements AroundInterceptor {
             return jarName.substring(lastIndexOfSeparator + 1);
         }
     }
-    
+
     private void dispatchLibJars(String contextKey, List<String> libJars) {
         ServerMetaDataHolder holder = this.traceContext.getServerMetaDataHolder();
         holder.addServiceInfo(contextKey, libJars);

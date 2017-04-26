@@ -51,39 +51,39 @@ public class ApusicConfig {
 
     }
 
-    public boolean isapusicEnable() {
+    public boolean isApusicEnable() {
         return apusicEnable;
     }
 
-    public List<String> getapusicBootstrapMains() {
+    public List<String> getApusicBootstrapMains() {
         return apusicBootstrapMains;
     }
 
-    public boolean isapusicConditionalTransformEnable() {
+    public boolean isApusicConditionalTransformEnable() {
         return apusicConditionalTransformEnable;
     }
 
-    public boolean isapusicHidePinpointHeader() {
+    public boolean isApusicHidePinpointHeader() {
         return apusicHidePinpointHeader;
     }
 
-    public boolean isapusicTraceRequestParam() {
+    public boolean isApusicTraceRequestParam() {
         return apusicTraceRequestParam;
     }
 
-    public Filter<String> getapusicExcludeUrlFilter() {
+    public Filter<String> getApusicExcludeUrlFilter() {
         return apusicExcludeUrlFilter;
     }
 
-    public String getapusicRealIpHeader() {
+    public String getApusicRealIpHeader() {
         return apusicRealIpHeader;
     }
 
-    public String getapusicRealIpEmptyValue() {
+    public String getApusicRealIpEmptyValue() {
         return apusicRealIpEmptyValue;
     }
 
-    public Filter<String> getapusicExcludeProfileMethodFilter() {
+    public Filter<String> getApusicExcludeProfileMethodFilter() {
         return apusicExcludeProfileMethodFilter;
     }
 

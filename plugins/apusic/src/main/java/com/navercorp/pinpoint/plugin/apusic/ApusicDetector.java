@@ -14,6 +14,8 @@ public class ApusicDetector implements ApplicationTypeDetector {
 
     private static final String DEFAULT_BOOTSTRAP_MAIN = "com.apusic.server.Main";
 
+    //private static final String REQUIRED_SYSTEM_PROPERTY = "com.apusic";
+
     private static final String REQUIRED_CLASS = "com.apusic.server.Main";
 
     private final List<String> bootstrapMains;
@@ -33,8 +35,10 @@ public class ApusicDetector implements ApplicationTypeDetector {
 
     @Override
     public boolean detect(ConditionProvider provider) {
-        return provider.checkMainClass(bootstrapMains) &&
-                provider.checkForClass(REQUIRED_CLASS);
+//        return provider.checkMainClass(bootstrapMains) &&
+//                provider.checkForClass(REQUIRED_CLASS);
+        return true;
+
     }
 
 }

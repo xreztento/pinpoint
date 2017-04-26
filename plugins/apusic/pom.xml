@@ -1,16 +1,17 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <artifactId>pinpoint-plugins</artifactId>
         <groupId>com.navercorp.pinpoint</groupId>
+        <artifactId>pinpoint</artifactId>
+        <relativePath>../..</relativePath>
         <version>1.6.1-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>apusic</artifactId>
+    <artifactId>pinpoint-apusic-plugin</artifactId>
+    <name>pinpoint-apusic-plugin</name>
     <packaging>jar</packaging>
 
-    <name>apusic</name>
     <url>http://maven.apache.org</url>
 
     <properties>
@@ -50,6 +51,13 @@
             <groupId>org.apache.tomcat</groupId>
             <artifactId>servlet-api</artifactId>
             <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.apusic</groupId>
+            <artifactId>core</artifactId>
+            <version>1.0</version>
+            <scope>system</scope>
+            <systemPath>/home/apusic/lib/apusic.jar</systemPath>
         </dependency>
     </dependencies>
 </project>

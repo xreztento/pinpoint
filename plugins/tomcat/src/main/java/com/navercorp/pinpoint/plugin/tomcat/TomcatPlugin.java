@@ -49,6 +49,7 @@ public class TomcatPlugin implements ProfilerPlugin, TransformTemplateAware {
      */
     @Override
     public void setup(ProfilerPluginSetupContext context) {
+        System.out.println("------------------Setup TomcatPlugin-----------------");
 
         final TomcatConfig config = new TomcatConfig(context.getConfig());
         if (logger.isInfoEnabled()) {

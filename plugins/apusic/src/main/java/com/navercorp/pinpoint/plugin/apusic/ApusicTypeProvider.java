@@ -10,6 +10,8 @@ public class ApusicTypeProvider implements TraceMetadataProvider {
 
     @Override
     public void setup(TraceMetadataSetupContext context) {
+        System.out.println("------------------Setup ApusicTypeProvider-----------------");
+
         context.addServiceType(ApusicConstants.APUSIC);
         context.addServiceType(ApusicConstants.APUSIC_METHOD);
     }
