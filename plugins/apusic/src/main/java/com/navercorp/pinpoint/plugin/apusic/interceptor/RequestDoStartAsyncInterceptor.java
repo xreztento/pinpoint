@@ -9,9 +9,9 @@ import com.navercorp.pinpoint.plugin.apusic.ApusicConstants;
 import com.navercorp.pinpoint.plugin.apusic.AsyncAccessor;
 
 /**
- * Created by xreztento@vip.sina.com on 17-4-25.
+ * Created by root on 17-4-26.
  */
-public class RequestDoStartAsvncInterceptor implements AroundInterceptor {
+public class RequestDoStartAsyncInterceptor implements AroundInterceptor {
 
     private PLogger logger = PLoggerFactory.getLogger(this.getClass());
     private boolean isDebug = logger.isDebugEnabled();
@@ -19,7 +19,7 @@ public class RequestDoStartAsvncInterceptor implements AroundInterceptor {
     private TraceContext traceContext;
     private MethodDescriptor descriptor;
 
-    public RequestDoStartAsvncInterceptor(TraceContext context, MethodDescriptor descriptor) {
+    public RequestDoStartAsyncInterceptor(TraceContext context, MethodDescriptor descriptor) {
         this.traceContext = context;
         this.descriptor = descriptor;
     }

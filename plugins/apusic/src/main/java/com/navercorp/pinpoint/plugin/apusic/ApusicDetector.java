@@ -35,9 +35,8 @@ public class ApusicDetector implements ApplicationTypeDetector {
 
     @Override
     public boolean detect(ConditionProvider provider) {
-//        return provider.checkMainClass(bootstrapMains) &&
-//                provider.checkForClass(REQUIRED_CLASS);
-        return true;
+        return provider.checkMainClass(bootstrapMains) &&
+                provider.checkForClass(REQUIRED_CLASS);
 
     }
 

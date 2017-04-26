@@ -30,32 +30,28 @@ public class ApusicPlugin implements ProfilerPlugin, TransformTemplateAware {
      */
     @Override
     public void setup(ProfilerPluginSetupContext context) {
-        System.out.println("------------------Setup ApusicPlugin-----------------");
 
+        final ApusicConfig config = new ApusicConfig(context.getConfig());
+        if (logger.isInfoEnabled()) {
+            logger.info("ApusicPlugin config:{}", config);
+        }
+        if (!config.isApusicEnable()) {
+            logger.info("ApusicPlugin disabled");
+            return;
+        }
 
-//        final ApusicConfig config = new ApusicConfig(context.getConfig());
-//        if (logger.isInfoEnabled()) {
-//            logger.info("ApusicPlugin config:{}", config);
-//        }
-//        if (!config.isApusicEnable()) {
-//            logger.info("ApusicPlugin disabled");
-//            return;
-//        }
-
-        //ApusicDetector apusicDetector = new ApusicDetector(config.getApusicBootstrapMains());
-        ApusicDetector apusicDetector = new ApusicDetector(null);
+        ApusicDetector apusicDetector = new ApusicDetector(config.getApusicBootstrapMains());
 
         context.addApplicationTypeDetector(apusicDetector);
 
-//        if (shouldAddTransformers(config)) {
-//            logger.info("Adding Apusic transformers");
-//            System.out.println("Adding Apusic transformers");
-//            addTransformers(config);
-//        } else {
-//            logger.info("Not adding Apusic transfomers");
-//            System.out.println("Not adding Apusic transfomers");
-//        }
-        addTransformers();
+        if (shouldAddTransformers(config)) {
+            logger.info("Adding Apusic transformers");
+            System.out.println("Adding Apusic transformers");
+            addTransformers(config);
+        } else {
+            logger.info("Not adding Apusic transfomers");
+            System.out.println("Not adding Apusic transfomers");
+        }
     }
 
     private boolean shouldAddTransformers(ApusicConfig config) {
@@ -66,10 +62,10 @@ public class ApusicPlugin implements ProfilerPlugin, TransformTemplateAware {
         return false;
     }
 
-    private void addTransformers() {
+    private void addTransformers(final ApusicConfig config) {
 
 
-        addRequestEditor();
+        addRequestEditor(config);
         addWebContainerEditor();
         addWebServiceEditor();
         addMuxerEditor();
@@ -79,7 +75,7 @@ public class ApusicPlugin implements ProfilerPlugin, TransformTemplateAware {
 
     }
 
-    private void addRequestEditor() {
+    private void addRequestEditor(final ApusicConfig config) {
         transformTemplate.transform("com.apusic.web.container.Request", new TransformCallback() {
 
             @Override
@@ -88,9 +84,9 @@ public class ApusicPlugin implements ProfilerPlugin, TransformTemplateAware {
                 target.addField(ApusicConstants.TRACE_ACCESSOR);
                 target.addField(ApusicConstants.ASYNC_ACCESSOR);
 
-                //if (config.isApusicHidePinpointHeader()) {
+                if (config.isApusicHidePinpointHeader()) {
                     target.weave("com.navercorp.pinpoint.plugin.apusic.aspect.RequestAspect");
-                //}
+                }
 
 
                 // trace asynchronous process.
