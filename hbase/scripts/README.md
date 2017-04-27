@@ -1,4 +1,4 @@
-# Scripts
+hba # Scripts
 Helper scripts are available to help set up or maintain Pinpoint.
 
 ## HBase

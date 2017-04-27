@@ -52,6 +52,7 @@
         <module>resin</module>
         <module>apusic</module>
         <module>template</module>
+        <module>dm-jdbc</module>
     </modules>
 
     <dependencies>
