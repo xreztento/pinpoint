@@ -53,6 +53,7 @@
         <module>apusic</module>
         <module>template</module>
         <module>dm-jdbc</module>
+        <module>kingbase-jdbc</module>
     </modules>
 
     <dependencies>
