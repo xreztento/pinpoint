@@ -54,6 +54,7 @@
         <module>template</module>
         <module>dm-jdbc</module>
         <module>kingbase-jdbc</module>
+        <module>oscar-jdbc</module>
     </modules>
 
     <dependencies>

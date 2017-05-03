@@ -12,7 +12,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.navercorp.pinpoint.plugin.jdbc.kingbase;
+package com.navercorp.pinpoint.plugin.jdbc.oscar;
 
 import com.navercorp.pinpoint.bootstrap.config.ProfilerConfig;
 import com.navercorp.pinpoint.bootstrap.plugin.jdbc.JdbcConfig;
@@ -21,20 +21,19 @@ import com.navercorp.pinpoint.bootstrap.plugin.jdbc.JdbcConfig;
  * @author Brad Hong
  *
  */
-public class KingbaseConfig extends JdbcConfig {
+public class OscarConfig extends JdbcConfig {
     private final boolean profileSetAutoCommit;
     private final boolean profileCommit;
     private final boolean profileRollback;
 
-    public KingbaseConfig(ProfilerConfig config) {
-        super(config.readBoolean("profiler.jdbc.kingbase", false),
-                config.readBoolean("profiler.jdbc.kingbase.tracesqlbindvalue", config.isTraceSqlBindValue()),
+    public OscarConfig(ProfilerConfig config) {
+        super(config.readBoolean("profiler.jdbc.oscar", false),
+                config.readBoolean("profiler.jdbc.oscar.tracesqlbindvalue", config.isTraceSqlBindValue()),
                 config.getMaxSqlBindValueSize());
-        this.profileSetAutoCommit = config.readBoolean("profiler.jdbc.kingbase.setautocommit", false);
-        this.profileCommit = config.readBoolean("profiler.jdbc.kingbase.commit", false);
-        this.profileRollback = config.readBoolean("profiler.jdbc.kingbase.rollback", false);
+        this.profileSetAutoCommit = config.readBoolean("profiler.jdbc.oscar.setautocommit", false);
+        this.profileCommit = config.readBoolean("profiler.jdbc.oscar.commit", false);
+        this.profileRollback = config.readBoolean("profiler.jdbc.oscar.rollback", false);
     }
-
 
     public boolean isProfileSetAutoCommit() {
         return profileSetAutoCommit;
@@ -48,9 +47,8 @@ public class KingbaseConfig extends JdbcConfig {
         return profileRollback;
     }
 
-
     @Override
     public String toString() {
-        return "KingbaseConfig [" + super.toString() + ", profileSetAutoCommit=" + profileSetAutoCommit + ", profileCommit=" + profileCommit + ", profileRollback=" + profileRollback + "]";
+        return "OscarConfig [" + super.toString() + ", profileSetAutoCommit=" + profileSetAutoCommit + ", profileCommit=" + profileCommit + ", profileRollback=" + profileRollback + "]";
     }
 }

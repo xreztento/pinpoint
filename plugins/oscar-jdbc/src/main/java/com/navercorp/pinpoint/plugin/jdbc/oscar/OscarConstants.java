@@ -12,7 +12,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.navercorp.pinpoint.plugin.jdbc.kingbase;
+package com.navercorp.pinpoint.plugin.jdbc.oscar;
 
 import com.navercorp.pinpoint.common.trace.ServiceType;
 import com.navercorp.pinpoint.common.trace.ServiceTypeFactory;
@@ -23,12 +23,12 @@ import static com.navercorp.pinpoint.common.trace.ServiceTypeProperty.*;
  * @author Brad Hong
  *
  */
-public final class KingbaseConstants {
-    private KingbaseConstants() {
+public final class OscarConstants {
+    private OscarConstants() {
     }
 
-    public static final String KINGBASE_SCOPE = "KINGBASE_JDBC";
+    public static final String OSCAR_SCOPE = "OSCAR_JDBC";
     
-    public static final ServiceType KINGBASE = ServiceTypeFactory.of(2190, "KINGBASE", TERMINAL, INCLUDE_DESTINATION_ID);
-    public static final ServiceType KINGBASE_EXECUTE_QUERY = ServiceTypeFactory.of(2191, "KINGBASE_EXECUTE_QUERY", "KINGBASE", TERMINAL, RECORD_STATISTICS, INCLUDE_DESTINATION_ID);
+    public static final ServiceType OSCAR = ServiceTypeFactory.of(2170, "OSCAR", TERMINAL, INCLUDE_DESTINATION_ID);
+    public static final ServiceType OSCAR_EXECUTE_QUERY = ServiceTypeFactory.of(2171, "OSCAR_EXECUTE_QUERY", "OSCAR", TERMINAL, RECORD_STATISTICS, INCLUDE_DESTINATION_ID);
 }
