@@ -24,6 +24,7 @@
 	});
 	pinpointApp.directive( "configurationDirective", [ "ConfigurationDirectiveConfig", "$rootScope", "$timeout", "AnalyticsService",
 		function ( cfg, $rootScope, $timeout, AnalyticsService ) {
+
 			return {
 				restrict: "EA",
 				replace: true,
@@ -40,6 +41,16 @@
 					var bChangedFavorite = false;
 					scope.menuInfo = cfg.menu;
 
+                    //hide view if the user is not manager
+                    scope.isManager = function(){
+
+                        if($rootScope.userSession.getItem("role") === "admin"){
+                            return false;
+                        } else {
+                            return true;
+                        }
+
+                    };
 					init();
 					function init() {
 						// scope.configurationHtml = "features/configuration/configuration.html?v=" + G_BUILD_TIME;
@@ -68,6 +79,8 @@
 					function initCurrentMenu() {
 						currentMenuName = scope.menuInfo[0].value;
 					}
+
+
 
 					scope.isSelected = function( menuName ) {
 						return currentMenuName === menuName;

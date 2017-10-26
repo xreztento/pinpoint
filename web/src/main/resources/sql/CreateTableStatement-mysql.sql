@@ -25,6 +25,7 @@ CREATE TABLE `puser` (
   `department` VARCHAR(150) NOT NULL,
   `phonenumber` VARCHAR(100),
   `email` VARCHAR(100),
+  `password` VARCHAR(32),
   PRIMARY KEY (`number`)
 );
 ALTER TABLE puser ADD UNIQUE KEY user_id_idx (`user_id`);

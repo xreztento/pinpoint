@@ -49,6 +49,15 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public int updateUserWithPassword(String userId, String oldPassword, String password) {
+        User user = new User();
+        user.setUserId(userId);
+        user.setOldPassword(oldPassword);
+        user.setPassword(password);
+        return userDao.updateUserWithPassword(user);
+    }
+
+    @Override
     public List<User> selectUser() {
         return userDao.selectUser();
     }
@@ -61,6 +70,14 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<User> selectUserByUserName(String userName) {
         return userDao.selectUserByUserName(userName);
+    }
+
+    @Override
+    public List<User> selectUserByUserNameAndPassword(String userName, String password) {
+        User user = new User();
+        user.setName(userName);
+        user.setPassword(password);
+        return userDao.selectUserByUserNameAndPassword(user);
     }
 
     @Override

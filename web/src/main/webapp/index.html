@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en-US" class="no-js">
 <head>
-    <title>PINPOINT</title>
+    <title>TEMPO-APM</title>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="description" content="">
@@ -44,7 +44,9 @@
 	<link rel="stylesheet" href="styles/jquery.BigScatterChart.css?v=${buildTime}">
 	<link rel="stylesheet" href="styles/timer.css?v=${buildTime}">
 	<link rel="stylesheet" href="styles/configuration.css?v=${buildTime}">
-	<link rel="stylesheet" href="styles/xeicon.min.css?v=${buildTime}">
+    <link rel="stylesheet" href="styles/newpassword.css?v=${buildTime}">
+
+    <link rel="stylesheet" href="styles/xeicon.min.css?v=${buildTime}">
 	<!-- pinpoint.css###-->
 </head>
 <body ng-app="pinpointApp" style="overflow:hidden;">
@@ -189,6 +191,8 @@
 </div>
 
 <configuration-directive></configuration-directive>
+<new-password-directive></new-password-directive>
+
 <thread-dump-info-layer-directive></thread-dump-info-layer-directive>
 
 <!--###base-lib.min.js -->
@@ -210,6 +214,7 @@
 <script src="components/angular-slider/angular-slider.min.js?v=${buildTime}"></script>
 <script src="components/angular-base64/angular-base64.min.js?v=${buildTime}"></script>
 <script src="components/angular-timer/dist/angular-timer.min.js?v=${buildTime}"></script>
+<script src="components/angular-sessionstorage/ngStorage.min.js?v=${buildTime}"></script>
 <!-- angular-lib.min.js###-->
 
 <!--###util-lib.min.js -->
@@ -329,6 +334,11 @@
 <script src="common/services/local-storage-manager.service.js?v=${buildTime}"></script>
 <script src="common/services/system-configuration.service.js?v=${buildTime}"></script>
 <script src="common/services/user-configuration.service.js?v=${buildTime}"></script>
+<script src="common/services/login-ajax.service.js?v=${buildTime}"></script>
+<script src="common/services/logout-ajax.service.js?v=${buildTime}"></script>
+<script src="common/services/newpassword-ajax.service.js?v=${buildTime}"></script>
+
+
 
 <script src="features/applicationList/application-list.directive.js?v=${buildTime}"></script>
 <script src="features/periodSelector/period-selector.directive.js?v=${buildTime}"></script>
@@ -369,8 +379,13 @@
 <script src="features/configuration/help/help.directive.js?v=${buildTime}"></script>
 <script src="features/threadDumpInfoLayer/thread-dump-info-layer.directive.js?v=${buildTime}"></script>
 <script src="features/realtimeChart/realtime-chart.controller.js?v=${buildTime}"></script>
+<script src="features/myself/newPassword/newpassword.directive.js?v=${buildTime}"></script>
+
+
 
 <script src="pages/main/main.controller.js?v=${buildTime}"></script>
+<script src="pages/main/login.controller.js?v=${buildTime}"></script>
+
 <script src="pages/inspector/inspector.controller.js?v=${buildTime}"></script>
 <script src="pages/transactionList/transaction-list.controller.js?v=${buildTime}"></script>
 <script src="pages/transactionDetail/transaction-detail.controller.js?v=${buildTime}"></script>

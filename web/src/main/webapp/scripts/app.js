@@ -8,7 +8,10 @@ var pinpointApp = angular.module('pinpointApp', [ 'ngRoute', 'ngResource', 'ngSa
 
 pinpointApp.config(['$routeProvider', '$locationProvider', '$modalProvider', function ($routeProvider, $locationProvider, $modalProvider) {
     $locationProvider.html5Mode(false).hashPrefix(''); // hashbang mode - could use other modes (html5 etc)
-    $routeProvider.when('/main', {
+    $routeProvider.when('/login', {
+        templateUrl: 'pages/main/login.html',
+        controller: 'MainCtrl'
+    }).when('/main', {
         templateUrl: 'pages/main/ready.html',
         controller: 'MainCtrl'
     }).when('/main/:application', {
@@ -70,6 +73,8 @@ pinpointApp.config(['$routeProvider', '$locationProvider', '$modalProvider', fun
 
 pinpointApp.run([ "$rootScope", "$window", "$timeout", "$location", "$route", "SystemConfigurationService", "UserConfigurationService",
     function ($rootScope, $window, $timeout, $location, $route, SystemConfigService, UserConfigService ) {
+        $rootScope.userSession = $window.sessionStorage;
+
         var original = $location.path;
         $location.path = function (path, reload) {
             if (reload === false) {
@@ -79,6 +84,7 @@ pinpointApp.run([ "$rootScope", "$window", "$timeout", "$location", "$route", "S
                     un();
                 });
             }
+
             return original.apply($location, [path]);
         };
 
@@ -90,11 +96,30 @@ pinpointApp.run([ "$rootScope", "$window", "$timeout", "$location", "$route", "S
 			}
 		});
 
+        //If userSession is null，redirect to /login
+        //If userSession is not null，redirect to /main
+
+        $rootScope.$on("$routeChangeStart", function(event){
+            if (!$rootScope.userSession.getItem("username")) {
+                $location.path("/login");
+                return;
+            }
+            if($rootScope.userSession.getItem("username") && $location.$$path === "/login"){
+                $location.path("/main");
+                return;
+            }
+            event.preventDefault();
+            return;
+
+        });
+
         if (!isCanvasSupported()) {
             $timeout(function () {
                 $('#supported-browsers').modal();
             }, 500);
         }
+
+
         moment.tz.setDefault( UserConfigService.getTimezone() );
     }
 ]);

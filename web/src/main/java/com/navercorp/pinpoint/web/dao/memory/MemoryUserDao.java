@@ -68,6 +68,12 @@ public class MemoryUserDao implements UserDao {
     }
 
     @Override
+    public int updateUserWithPassword(User user) {
+        users.get(user.getUserId()).setPassword(user.getPassword());
+        return 1;
+    }
+
+    @Override
     public User selectUserByUserId(String userId) {
         return users.get(userId);
     }
@@ -95,6 +101,19 @@ public class MemoryUserDao implements UserDao {
             }
         }
         
+        return userList;
+    }
+
+    @Override
+    public List<User> selectUserByUserNameAndPassword(User user) {
+        List<User> userList = new LinkedList<>();
+
+        for (User u : users.values()) {
+            if (user.getName().equals(u.getName()) && user.getPassword().equals(u.getPassword())) {
+                userList.add(u);
+            }
+        }
+
         return userList;
     }
 

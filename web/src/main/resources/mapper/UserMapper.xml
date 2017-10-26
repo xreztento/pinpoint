@@ -9,15 +9,15 @@
     </select>
     
     <insert id="insertUser" parameterType="User">
-        INSERT INTO puser (user_id, name, department, phonenumber, email)
-        VALUES (#{userId}, #{name}, #{department}, #{phoneNumber}, #{email})
+        INSERT INTO puser (user_id, name, department, phonenumber, email, password, role)
+        VALUES (#{userId}, #{name}, #{department}, #{phoneNumber}, #{email}, #{password}, 'guest')
     </insert>
        
     <insert id="insertUserList">
-            INSERT INTO puser (user_id, name, department, phonenumber, email)
+            INSERT INTO puser (user_id, name, department, phonenumber, email, password, role)
             VALUES
         <foreach collection="list" item="User" separator=",">
-             (#{User.userId}, #{User.name}, #{User.department}, #{User.phoneNumber}, #{User.email})
+             (#{User.userId}, #{User.name}, #{User.department}, #{User.phoneNumber}, #{User.email}, #{User.password}, 'guest')
         </foreach>
     </insert>
     
@@ -51,10 +51,22 @@
         WHERE name = #{name} 
         ORDER BY department
     </select>
+
+    <select id="selectUserByUserNameAndPassword" resultType="User">
+        SELECT *
+        FROM puser
+        WHERE name = #{name} AND password = #{password}
+        ORDER BY department
+    </select>
     
     <update id="updateUser" parameterType="User">
         UPDATE puser
-        SET name = #{name}, department = #{department}, phoneNumber = #{phoneNumber}, email = #{email}
+        SET name = #{name}, department = #{department}, phoneNumber = #{phoneNumber}, email = #{email}, password = #{password}
         WHERE user_id = #{userId}
+    </update>
+    <update id="updateUserWithPassword" parameterType="User">
+        UPDATE puser
+        SET password = #{password}
+        WHERE user_id = #{userId} AND password = #{oldPassword}
     </update>
 </mapper>

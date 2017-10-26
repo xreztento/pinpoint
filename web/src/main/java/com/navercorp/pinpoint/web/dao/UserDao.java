@@ -40,8 +40,13 @@ public interface UserDao {
 
     List<User> selectUserByUserName(String userName);
 
+    List<User> selectUserByUserNameAndPassword(User user);
+
+
     void updateUser(User user);
 
+
+    int updateUserWithPassword(User user);
 
 
 

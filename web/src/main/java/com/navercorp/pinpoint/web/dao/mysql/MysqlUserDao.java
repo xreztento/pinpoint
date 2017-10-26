@@ -64,6 +64,11 @@ public class MysqlUserDao implements UserDao {
     }
 
     @Override
+    public int updateUserWithPassword(User user) {
+        return sqlSessionTemplate.update(NAMESPACE + "updateUserWithPassword", user);
+    }
+
+    @Override
     public User selectUserByUserId(String userId) {
         return sqlSessionTemplate.selectOne(NAMESPACE + "selectUserByUserId", userId);
     }
@@ -76,6 +81,11 @@ public class MysqlUserDao implements UserDao {
     @Override
     public List<User> selectUserByUserName(String userName) {
         return sqlSessionTemplate.selectList(NAMESPACE + "selectUserByUserName", userName);
+    }
+
+    @Override
+    public List<User> selectUserByUserNameAndPassword(User user) {
+        return sqlSessionTemplate.selectList(NAMESPACE + "selectUserByUserNameAndPassword", user);
     }
 
     @Override

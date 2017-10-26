@@ -1,0 +1,246 @@
+/*
+ * Copyright 2014 NAVER Corp.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package com.navercorp.pinpoint.plugin.tongweb;
+
+import com.navercorp.pinpoint.bootstrap.async.AsyncTraceIdAccessor;
+import com.navercorp.pinpoint.bootstrap.instrument.*;
+import com.navercorp.pinpoint.bootstrap.instrument.transformer.TransformCallback;
+import com.navercorp.pinpoint.bootstrap.instrument.transformer.TransformTemplate;
+import com.navercorp.pinpoint.bootstrap.instrument.transformer.TransformTemplateAware;
+import com.navercorp.pinpoint.bootstrap.logging.PLogger;
+import com.navercorp.pinpoint.bootstrap.logging.PLoggerFactory;
+import com.navercorp.pinpoint.bootstrap.plugin.ProfilerPlugin;
+import com.navercorp.pinpoint.bootstrap.plugin.ProfilerPluginSetupContext;
+import com.navercorp.pinpoint.bootstrap.resolver.ConditionProvider;
+import com.navercorp.pinpoint.plugin.tongweb.TongwebConfig;
+import com.navercorp.pinpoint.plugin.tongweb.TongwebConstants;
+import com.navercorp.pinpoint.plugin.tongweb.TongwebDetector;
+
+import java.security.ProtectionDomain;
+
+
+public class TongwebPlugin implements ProfilerPlugin, TransformTemplateAware {
+
+    private final PLogger logger = PLoggerFactory.getLogger(this.getClass());
+
+    private TransformTemplate transformTemplate;
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see com.navercorp.pinpoint.bootstrap.plugin.ProfilerPlugin#setUp(com.navercorp.pinpoint.bootstrap.plugin.ProfilerPluginSetupContext)
+     */
+    @Override
+    public void setup(ProfilerPluginSetupContext context) {
+        System.out.println("------------------Setup TongwebPlugin-----------------");
+
+        final TongwebConfig config = new TongwebConfig(context.getConfig());
+        if (logger.isInfoEnabled()) {
+            logger.info("TongwebPlugin config:{}", config);
+        }
+        if (!config.isTongwebEnable()) {
+            logger.info("TongwebPlugin disabled");
+            return;
+        }
+
+        TongwebDetector tomcatDetector = new TongwebDetector(config.getTongwebBootstrapMains());
+        context.addApplicationTypeDetector(tomcatDetector);
+
+        if (shouldAddTransformers(config)) {
+            logger.info("Adding Tomcat transformers");
+            addTransformers(config);
+        } else {
+            logger.info("Not adding Tomcat transfomers");
+        }
+    }
+
+    private boolean shouldAddTransformers(TongwebConfig config) {
+        // Transform if conditional check is disabled
+        if (!config.isTongwebConditionalTransformEnable()) {
+            return true;
+        }
+        // Only transform if it's a Tomcat application or SpringBoot application
+        ConditionProvider conditionProvider = ConditionProvider.DEFAULT_CONDITION_PROVIDER;
+        boolean isTomcatApplication = conditionProvider.checkMainClass(config.getTongwebBootstrapMains());
+        boolean isSpringBootApplication = conditionProvider.checkMainClass(config.getSpringBootBootstrapMains());
+        return isTomcatApplication || isSpringBootApplication;
+}
+
+    private void addTransformers(TongwebConfig config) {
+//        if (config.isTongwebHidePinpointHeader()) {
+//            addRequestFacadeEditor();
+//        }
+
+        addRequestEditor();
+        addStandardHostValveEditor();
+        addStandardServiceEditor();
+        addTomcatConnectorEditor();
+        addWebappLoaderEditor();
+
+        addAsyncContextImpl();
+    }
+
+    private void addRequestEditor() {
+        transformTemplate.transform("com.tongweb.web.core.core.ApplicationDispatcher", new TransformCallback() {
+
+            @Override
+            public byte[] doInTransform(Instrumentor instrumentor, ClassLoader classLoader, String className, Class<?> classBeingRedefined, ProtectionDomain protectionDomain, byte[] classfileBuffer) throws InstrumentException {
+                InstrumentClass target = instrumentor.getInstrumentClass(classLoader, className, classfileBuffer);
+                target.addField(TongwebConstants.TRACE_ACCESSOR);
+
+                // clear request.
+                InstrumentMethod recycleMethodEditorBuilder = target.getDeclaredMethod("recycle");
+                if (recycleMethodEditorBuilder != null) {
+                    recycleMethodEditorBuilder.addInterceptor("com.navercorp.pinpoint.plugin.tomcat.interceptor.RequestRecycleInterceptor");
+                }
+
+                // trace asynchronous process.
+                InstrumentMethod startAsyncMethodEditor = target.getDeclaredMethod("startAsync", "javax.servlet.ServletRequest", "javax.servlet.ServletResponse");
+                if (startAsyncMethodEditor != null) {
+                    startAsyncMethodEditor.addInterceptor("com.navercorp.pinpoint.plugin.tomcat.interceptor.RequestStartAsyncInterceptor");
+                }
+
+                return target.toBytecode();
+            }
+        });
+    }
+
+//    private void addRequestFacadeEditor() {
+//        transformTemplate.transform("org.apache.catalina.connector.RequestFacade", new TransformCallback() {
+//
+//            @Override
+//            public byte[] doInTransform(Instrumentor instrumentor, ClassLoader classLoader, String className, Class<?> classBeingRedefined, ProtectionDomain protectionDomain, byte[] classfileBuffer) throws InstrumentException {
+//                InstrumentClass target = instrumentor.getInstrumentClass(classLoader, className, classfileBuffer);
+//                if (target != null) {
+//                    target.weave("com.navercorp.pinpoint.plugin.tomcat.aspect.RequestFacadeAspect");
+//                    return target.toBytecode();
+//                }
+//
+//                return null;
+//            }
+//        });
+//    }
+
+    private void addStandardHostValveEditor() {
+        transformTemplate.transform("org.apache.catalina.core.StandardHostValve", new TransformCallback() {
+
+            @Override
+            public byte[] doInTransform(Instrumentor instrumentor, ClassLoader classLoader, String className, Class<?> classBeingRedefined, ProtectionDomain protectionDomain, byte[] classfileBuffer) throws InstrumentException {
+                InstrumentClass target = instrumentor.getInstrumentClass(classLoader, className, classfileBuffer);
+
+                InstrumentMethod method = target.getDeclaredMethod("invoke", "org.apache.catalina.connector.Request", "org.apache.catalina.connector.Response");
+                if (method != null) {
+                    method.addInterceptor("com.navercorp.pinpoint.plugin.tomcat.interceptor.StandardHostValveInvokeInterceptor");
+                }
+
+                return target.toBytecode();
+            }
+        });
+    }
+
+    private void addStandardServiceEditor() {
+        transformTemplate.transform("org.apache.catalina.core.StandardService", new TransformCallback() {
+
+            @Override
+            public byte[] doInTransform(Instrumentor instrumentor, ClassLoader classLoader, String className, Class<?> classBeingRedefined, ProtectionDomain protectionDomain, byte[] classfileBuffer) throws InstrumentException {
+                InstrumentClass target = instrumentor.getInstrumentClass(classLoader, className, classfileBuffer);
+
+                // Tomcat 6
+                InstrumentMethod startEditor = target.getDeclaredMethod("start");
+                if (startEditor != null) {
+                    startEditor.addInterceptor("com.navercorp.pinpoint.plugin.tomcat.interceptor.StandardServiceStartInterceptor");
+                }
+
+                // Tomcat 7
+                InstrumentMethod startInternalEditor = target.getDeclaredMethod("startInternal");
+                if (startInternalEditor != null) {
+                    startInternalEditor.addInterceptor("com.navercorp.pinpoint.plugin.tomcat.interceptor.StandardServiceStartInterceptor");
+                }
+
+                return target.toBytecode();
+            }
+        });
+    }
+
+    private void addTomcatConnectorEditor() {
+        transformTemplate.transform("org.apache.catalina.connector.Connector", new TransformCallback() {
+
+            @Override
+            public byte[] doInTransform(Instrumentor instrumentor, ClassLoader classLoader, String className, Class<?> classBeingRedefined, ProtectionDomain protectionDomain, byte[] classfileBuffer) throws InstrumentException {
+                InstrumentClass target = instrumentor.getInstrumentClass(classLoader, className, classfileBuffer);
+
+                // Tomcat 6
+                InstrumentMethod initializeEditor = target.getDeclaredMethod("initialize");
+                if (initializeEditor != null) {
+                    initializeEditor.addInterceptor("com.navercorp.pinpoint.plugin.tomcat.interceptor.ConnectorInitializeInterceptor");
+                }
+
+                // Tomcat 7
+                InstrumentMethod initInternalEditor = target.getDeclaredMethod("initInternal");
+                if (initInternalEditor != null) {
+                    initInternalEditor.addInterceptor("com.navercorp.pinpoint.plugin.tomcat.interceptor.ConnectorInitializeInterceptor");
+                }
+
+                return target.toBytecode();
+            }
+        });
+    }
+
+    private void addWebappLoaderEditor() {
+        transformTemplate.transform("org.apache.catalina.loader.WebappLoader", new TransformCallback() {
+
+            @Override
+            public byte[] doInTransform(Instrumentor instrumentor, ClassLoader classLoader, String className, Class<?> classBeingRedefined, ProtectionDomain protectionDomain, byte[] classfileBuffer) throws InstrumentException {
+                InstrumentClass target = instrumentor.getInstrumentClass(classLoader, className, classfileBuffer);
+
+                InstrumentMethod startMethod = null;
+                if (target.hasDeclaredMethod("start")) {
+                    // Tomcat 6 - org.apache.catalina.loader.WebappLoader.start()
+                    startMethod = target.getDeclaredMethod("start");
+                } else if (target.hasDeclaredMethod("startInternal")) {
+                    // Tomcat 7, 8 - org.apache.catalina.loader.WebappLoader.startInternal()
+                    startMethod = target.getDeclaredMethod("startInternal");
+                }
+
+                if (startMethod != null) {
+                    startMethod.addInterceptor("com.navercorp.pinpoint.plugin.tomcat.interceptor.WebappLoaderStartInterceptor");
+                }
+
+                return target.toBytecode();
+            }
+        });
+    }
+
+    private void addAsyncContextImpl() {
+        transformTemplate.transform("org.apache.catalina.core.AsyncContextImpl", new TransformCallback() {
+
+            @Override
+            public byte[] doInTransform(Instrumentor instrumentor, ClassLoader classLoader, String className, Class<?> classBeingRedefined, ProtectionDomain protectionDomain, byte[] classfileBuffer) throws InstrumentException {
+                InstrumentClass target = instrumentor.getInstrumentClass(classLoader, className, classfileBuffer);
+                target.addField(AsyncTraceIdAccessor.class.getName());
+                for (InstrumentMethod method : target.getDeclaredMethods(MethodFilters.name("dispatch"))) {
+                    method.addInterceptor("com.navercorp.pinpoint.plugin.tomcat.interceptor.AsyncContextImplDispatchMethodInterceptor");
+                }
+
+                return target.toBytecode();
+            }
+        });
+    }
+
+    @Override
+    public void setTransformTemplate(TransformTemplate transformTemplate) {
+        this.transformTemplate = transformTemplate;
+    }
+}

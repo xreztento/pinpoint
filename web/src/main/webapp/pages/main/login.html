@@ -1,0 +1,27 @@
+<div class="main-container">
+
+    <div style="width:60%;margin-left: auto;margin-right: auto" class="main-section--answer main-section content-container">
+        <p style="margin-bottom: 50px; text-align: center"><img src="images/tempo-amp-logo.png"></p>
+
+
+        <form name="login_form" ng-controller="loginController" ng-submit="loginForm()">
+
+            <div id="login-alert" class="alert alert-danger alert-dismissible" style="display: none" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <strong>Login Failed!</strong>{{alert.message}}
+            </div>
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input type="text" class="form-control" id="username" name="username" placeholder="Username" ng-model="login.username" required>
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" class="form-control" id="password" name="password" placeholder="Password" ng-model="login.password" required>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+    </div>
+
+
+</div>

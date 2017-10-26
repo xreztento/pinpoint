@@ -7,16 +7,21 @@ public class User {
     private String department;
     private String phoneNumber;
     private String email;
+    private String password;
+    private String role;
+    private String oldPassword;
     
     public User() {
     }
     
-    public User(String userId, String name, String department, String phoneNumber, String email) {
+    public User(String userId, String name, String department, String phoneNumber, String email, String password, String role) {
         this.userId = userId;
         this.name = name;
         this.department = department;
         this.phoneNumber = phoneNumber;
         this.email = email;
+        this.password = password;
+        this.role = role;
     }
 
     public String getNumber() {
@@ -66,7 +71,32 @@ public class User {
     public void setEmail(String email) {
         this.email = email;
     }
-    
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
+    }
+
+
+    public String getOldPassword() {
+        return oldPassword;
+    }
+
+    public void setOldPassword(String oldPassword) {
+        this.oldPassword = oldPassword;
+    }
+
     public void removeHyphenForPhoneNumber() {
         if (phoneNumber != null && phoneNumber.contains("-")) {
             phoneNumber = phoneNumber.replace("-", "");

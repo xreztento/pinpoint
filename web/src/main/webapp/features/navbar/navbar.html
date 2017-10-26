@@ -1,6 +1,6 @@
 <div class="navbar main-navbar bs-docs-nav">
     <div class="nav-container">
-        <a href="/" class="navbar-brand"><img class="brand" src="/images/logo2.png" width="116" height="18"></a>
+        <a href="/" class="navbar-brand"><img class="brand" src="/images/logo2.png" width="140" height="18"></a>
 
         <div class="nav-collapse">
             <form class="navbar-form pull-left">
@@ -8,12 +8,12 @@
                     <li style="margin-top:0px;">
                         <div style="margin-top:5px;" id="navbar_application">
                             <select class="application" ng-disabled="disableApplication" id="navbar_application">
-                            	<option></option>
-                            	<optgroup label="Favorite">
-                            		<option ng-repeat="app in applications | limitTo: favoriteCount" value="{{app.text}}">{{app.text}}</option>
-                            	</optgroup>
-                            	<optgroup label="Application List">
-                                	<option ng-repeat="app in applications" value="{{app.text}}" ng-if="$index >= favoriteCount">{{app.text}}</option>
+                                <option></option>
+                                <optgroup label="Favorite">
+                                    <option ng-repeat="app in applications | limitTo: favoriteCount" value="{{app.text}}">{{app.text}}</option>
+                                </optgroup>
+                                <optgroup label="Application List">
+                                    <option ng-repeat="app in applications" value="{{app.text}}" ng-if="$index >= favoriteCount">{{app.text}}</option>
                                 </optgroup>
                             </select>
                             <img ng-hide="hideFakeApplication" src="images/navbar_application_fake.png" style="position:absolute;left:0;top:5px;">
@@ -21,12 +21,12 @@
                     </li>
                     <li class="divider-vertical" ng-hide="bIsInspector"></li>
                     <li id="navbar_depth" class="inout-bound" ng-hide="bIsInspector">
-                    	<div class="btn-group btn-group-sm input-group input-group-sm" style="margin-top:0px;width:105px;">
+                        <div class="btn-group btn-group-sm input-group input-group-sm" style="margin-top:0px;width:105px;">
                             <button type="button" class="btn btn-default">
                                 <img src="images/inbound.png" width="18px" height="18px"/> {{callee}} <img src="images/outbound.png" width="18px" height="18px"/> {{caller}}
                             </button>
-                    		<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="padding-bottom:6px">
-								 <span class="caret"></span>
+                            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="padding-bottom:6px">
+                                <span class="caret"></span>
                                 <span class="sr-only">Toggle Dropdown</span>
                             </button>
                             <div class="dropdown-menu" role="menu">
@@ -43,13 +43,13 @@
                                 </div>
                             </div>
                         </div>
-                    </li>	
+                    </li>
                     <li class="divider-vertical"></li>
                     <li class="for-datetimepicker" id="navbar_period">
                         <div ng-show="periodType != 'range'">
                             <div class="btn-group btn-group-sm" style="margin-top:0px;width:386px;float:left;">
                                 <button type="button" class="btn btn-success" ng-click="togglePeriod('range')"><span class="glyphicon glyphicon-th-list"></span></button>
-								<button type="button" class="btn btn-default" ng-click="setRealtime()" ng-hide="bIsInspector" ng-disabled="periodDelay" ng-class="isRealtime() ? 'btn-info' : ''" style="padding-top:3px;padding-bottom:3px;line-height:1.1;font-size:10px">REAL<br/>TIME</button>
+                                <button type="button" class="btn btn-default" ng-click="setRealtime()" ng-hide="bIsInspector" ng-disabled="periodDelay" ng-class="isRealtime() ? 'btn-info' : ''" style="padding-top:3px;padding-bottom:3px;line-height:1.1;font-size:10px">REAL<br/>TIME</button>
                                 <button type="button" class="btn btn-default" ng-repeat="period in aReadablePeriodList" ng-class="getPeriodClass( period )" ng-click="setPeriod(period)" ng-disabled="periodDelay">{{period == "5m" ? "Last " + period : period}}</button>
                             </div>
                             <div class="btn-group btn-group-sm input-group input-group-sm" style="float:left;margin-top:0px;padding-left:6px;width:146px;float:left;" ng-show="showUpdate()">
@@ -84,7 +84,6 @@
                                     <span class="glyphicon glyphicon-search"></span>
                                 </button>
                             </span>
-                            
                         </div>
                     </li>
                 </ul>
@@ -92,9 +91,11 @@
         </div>
     </div>
     <div style="position:fixed;right:10px;top:10px;">
-    	<span class="glyphicon glyphicon-question-sign navbarTooltip" style="cursor:pointer;font-size:17px;color:#FFF;top:0px;"></span>
-    	<span class="glyphicon glyphicon-cog" ng-click="showConfig()" style="cursor:pointer;font-size:17px;color:#FFF;padding-left:8px;top:0px;"></span>
-   		<a href="https://github.com/naver/pinpoint" target="_blank"><i class="xi-github" style="color:#FFF;padding-left:6px;font-size:22px;"></i></a>
+
+        <a class="button glyphicon glyphicon-user navbarTooltip" type="button" style="cursor:pointer;font-size:17px;color:#FFF;top:0px;text-decoration:none;" data-toggle="popover" data-container="body" data-placement="bottom"
+           data-content="<li><a style='cursor:pointer;' id='newpassword-btn'><i style='margin-right:5px' class='glyphicon glyphicon-edit'></i>NewPassword</a></li><li><a style='cursor:pointer;' id='logout-btn'><i style='margin-right:5px' class='glyphicon glyphicon-log-out'></i>Logout</a></li>"></a>
+
+        <span class="glyphicon glyphicon-cog" ng-click="showConfig()" style="cursor:pointer;font-size:17px;color:#FFF;padding-left:8px;top:0px;"></span>
     </div>
     <div id="ui-datepicker-div">
         <div id="from-picker"></div>
@@ -110,4 +111,3 @@
         </div>
     </div>
 </div>
-

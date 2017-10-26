@@ -32,11 +32,15 @@ public interface UserService {
 
     void updateUser(User user);
 
+    int updateUserWithPassword(String userId, String oldPassword, String password);
+
     List<User> selectUser();
 
     User selectUserByUserId(String userId);
 
     List<User> selectUserByUserName(String userName);
+
+    List<User> selectUserByUserNameAndPassword(String userName, String password);
 
     List<User> selectUserByDepartment(String department);
 

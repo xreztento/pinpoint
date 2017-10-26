@@ -89,9 +89,11 @@
 					}
 					aEditNode[0].find("input").val( oPinpointUser.userId );
 					aEditNode[1].find("input").val( oPinpointUser.name );
-					aEditNode[2].find("input").val( oPinpointUser.department );
-					aEditNode[3].find("input").val( oPinpointUser.phoneNumber );
-					aEditNode[4].find("input").val( oPinpointUser.email );
+                    aEditNode[2].find("input").val( oPinpointUser.password );
+                    aEditNode[3].find("input").val( oPinpointUser.password );
+					aEditNode[4].find("input").val( oPinpointUser.department );
+					aEditNode[5].find("input").val( oPinpointUser.phoneNumber );
+					aEditNode[6].find("input").val( oPinpointUser.email );
 					aEditNode[0].find("input").attr("disabled", "disabled");
 
 					AlarmUtilService.hide( aEditNode[len].find( CONSTS.DIV_ADD ) );
@@ -110,13 +112,17 @@
 				function getNewPinpointUser() {
 					var userId = $.trim( aEditNode[0].find("input").val() );
 					var userName = $.trim( aEditNode[1].find("input").val() );
-					var userDepartment = $.trim( aEditNode[2].find("input").val() );
-					var userPhone = $.trim( aEditNode[3].find("input").val() );
-					var userEmail = $.trim( aEditNode[4].find("input").val() );
+                    var password = $.trim( aEditNode[2].find("input").val() );
+                    var repassword = $.trim( aEditNode[3].find("input").val() );
+                    var userDepartment = $.trim( aEditNode[4].find("input").val() );
+					var userPhone = $.trim( aEditNode[5].find("input").val() );
+					var userEmail = $.trim( aEditNode[6].find("input").val() );
 
 					var oPinpointUser = {
 						"userId": userId,
 						"name": userName,
+                        "password" : password,
+                        "repassword" : repassword,
 						"department": userDepartment,
 						"phoneNumber": userPhone,
 						"email": userEmail
@@ -324,6 +330,8 @@
 		MIN_SEARCH_LENGTH : 2,
 		INPUT_USER_ID_AND_NAME: "Input user id and name",
 		INPUT_PHONE_OR_EMAIL: "Input phone number or email",
+        INPUT_PASSWORD : "Input password and repassword",
+        INPUT_PASSWORD_NOT_MATCH : "Input password and repassword is not match",
 		YOU_CAN_ONLY_INPUT_NUMBERS: "You can only input numbers",
 		INVALID_EMAIL_FORMAT: "Invalid email format.",
 		DIV_NORMAL: "div._normal",
@@ -371,6 +379,18 @@
 				cbFail({ errorMessage: CONSTS.INVALID_EMAIL_FORMAT });
 				return;
 			}
+
+            if ( oNewPinpointUser.password === "" && oNewPinpointUser.repassword === "") {
+                addBlink( aEditNode );
+                cbFail({ errorMessage: CONSTS.INPUT_PASSWORD });
+                return;
+            }
+
+            if ( oNewPinpointUser.password !== oNewPinpointUser.repassword) {
+                addBlink( aEditNode );
+                cbFail({ errorMessage: CONSTS.INPUT_PASSWORD_NOT_MATCH });
+                return;
+            }
 			
 			AlarmUtilService.sendCRUD( "createPinpointUser", oNewPinpointUser, function( oServerData ) {
 				oNewPinpointUser.number = oServerData.number;
@@ -455,6 +475,18 @@
 				cbFail({ errorMessage: CONSTS.INVALID_EMAIL_FORMAT });
 				return;
 			}
+
+            if ( oPinpointUser.password === "" && oPinpointUser.repassword === "") {
+                addBlink( aEditNode );
+                cbFail({ errorMessage: CONSTS.INPUT_PASSWORD });
+                return;
+            }
+
+            if ( oPinpointUser.password !== oPinpointUser.repassword) {
+                addBlink( aEditNode );
+                cbFail({ errorMessage: CONSTS.INPUT_PASSWORD_NOT_MATCH });
+                return;
+            }
 
 			AlarmUtilService.sendCRUD( "updatePinpointUser", oPinpointUser, function( oServerData ) {
 				self.cancelAction( AlarmUtilService, aEditNode, $node, function () {});

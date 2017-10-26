@@ -20,6 +20,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.navercorp.pinpoint.web.util.CodecUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,13 +53,15 @@ public class UserController {
     @ResponseBody
     public Map<String, String> insertUser(@RequestBody User user) {
         
-        if (StringUtils.isEmpty(user.getUserId()) || StringUtils.isEmpty(user.getName())) {
+        if (StringUtils.isEmpty(user.getUserId()) || StringUtils.isEmpty(user.getName()) || StringUtils.isEmpty(user.getPassword())) {
             Map<String, String> result = new HashMap<>();
             result.put("errorCode", "500");
             result.put("errorMessage", "there is not userId or name in params to creating user infomation");
             return result;
         }
-        
+
+        String password = user.getPassword();
+        user.setPassword(CodecUtils.getMd5Hex(password));
         userService.insertUser(user);
 
         Map<String, String> result = new HashMap<>();
@@ -118,7 +121,9 @@ public class UserController {
             result.put("errorMessage", "there is not userId in params to update user");
             return result;
         }
-        
+
+        String password = user.getPassword();
+        user.setPassword(CodecUtils.getMd5Hex(password));
         userService.updateUser(user);
         
         Map<String, String> result = new HashMap<>();
