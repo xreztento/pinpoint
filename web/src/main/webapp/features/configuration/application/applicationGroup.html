@@ -9,7 +9,10 @@
 		<ul>
 			<li ng-repeat="app in applicationList | filter:applicationFilter" id="{{getAppId(app)}}">
 				<img ng-src="images/icons/{{app.serviceType}}.png"><span>{{app.applicationName}}</span>
-			</li>
+                <a style="float:right" class="_normal" ng-click="onRemoveApplicationName(app.applicationName)">
+                    <i class="glyphicon glyphicon-remove remove" aria-hidden="true"></i>
+                </a>
+            </li>
 		</ul>
 	</div>
 </div>

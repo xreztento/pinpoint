@@ -61,7 +61,7 @@
 					}
 					function getApplicationList() {
 						CommonAjaxService.getApplicationList( function( data ) {
-							if ( angular.isArray( data ) === false || data.length === 0 ) {
+                            if ( angular.isArray( data ) === false || data.length === 0 ) {
 								scope.applicationList[0].text = 'Application not found.';
 							} else {
 								scope.disableApplication = false;
@@ -158,6 +158,19 @@
 							});
 						}
 					});
+
+                    scope.$on("applicationList.reload", function(){
+                        $timeout(function() {
+                            if ( bUseFavorite ) {
+                                $timeout(function() {
+                                    parseApplicationList();
+                                    $application.off("select2:select").select2("destroy");
+                                    initSelect2();
+                                    $application.val(scope.selectedApplication).trigger("change");
+                                });
+                            }
+                        });
+                    });
 				}
 			};
 		}

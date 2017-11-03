@@ -18,6 +18,7 @@ package com.navercorp.pinpoint.web.interceptor;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -52,7 +53,12 @@ public class AdminAuthInterceptor extends HandlerInterceptorAdapter {
         if (StringUtils.isEmpty(password)) {
             return true;
         }
-        return checkAuthorization(request, response);
+        if(requestUri.contains("/admin/")){
+            return checkAdmin(request, response);
+        } else {
+            return checkAuthorization(request, response);
+
+        }
     }
 
     private boolean checkAuthorization(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -69,6 +75,20 @@ public class AdminAuthInterceptor extends HandlerInterceptorAdapter {
         }
     }
 
+    private boolean checkAdmin(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        HttpSession session = request.getSession();
+
+        if (session.getAttribute("role") == null) {
+            handleNotLogin(response);
+            return false;
+        } else if(!session.getAttribute("role").equals("admin")){
+            handleNotAdmin(response);
+            return false;
+        } else {
+            return true;
+        }
+    }
+
     private void handleMissingPassword(HttpServletResponse response) throws IOException {
         ServletServerHttpResponse serverResponse = new ServletServerHttpResponse(response);
         serverResponse.setStatusCode(HttpStatus.BAD_REQUEST);
@@ -79,6 +99,18 @@ public class AdminAuthInterceptor extends HandlerInterceptorAdapter {
         ServletServerHttpResponse serverResponse = new ServletServerHttpResponse(response);
         serverResponse.setStatusCode(HttpStatus.FORBIDDEN);
         serverResponse.getBody().write("Invalid password.".getBytes(UTF_8));
+    }
+
+    private void handleNotLogin(HttpServletResponse response) throws IOException {
+        ServletServerHttpResponse serverResponse = new ServletServerHttpResponse(response);
+        serverResponse.setStatusCode(HttpStatus.BAD_REQUEST);
+        serverResponse.getBody().write("Not Login.".getBytes(UTF_8));
+    }
+
+    private void handleNotAdmin(HttpServletResponse response) throws IOException {
+        ServletServerHttpResponse serverResponse = new ServletServerHttpResponse(response);
+        serverResponse.setStatusCode(HttpStatus.BAD_REQUEST);
+        serverResponse.getBody().write("Not Admin.".getBytes(UTF_8));
     }
 
     

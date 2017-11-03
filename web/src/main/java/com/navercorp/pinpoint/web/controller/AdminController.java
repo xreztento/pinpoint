@@ -36,7 +36,7 @@ import java.util.Map;
  * @author HyunGil Jeong
  */
 @Controller
-@PreAuthorize("hasPermission(null, null, 'admin')")
+@PreAuthorize("checkAdmin()")
 @RequestMapping("/admin")
 public class AdminController {
 
