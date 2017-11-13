@@ -55,7 +55,7 @@
 		};
 		this.closeAlert = function( $elAlert, $elLoading ) {
 			$elAlert.animate({
-				height: 50,
+				height: 50
 			}, 100, function() {
 				self.hide( $elAlert, $elLoading );
 			});

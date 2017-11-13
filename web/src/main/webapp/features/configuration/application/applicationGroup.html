@@ -9,10 +9,21 @@
 		<ul>
 			<li ng-repeat="app in applicationList | filter:applicationFilter" id="{{getAppId(app)}}">
 				<img ng-src="images/icons/{{app.serviceType}}.png"><span>{{app.applicationName}}</span>
-                <a style="float:right" class="_normal" ng-click="onRemoveApplicationName(app.applicationName)">
-                    <i class="glyphicon glyphicon-remove remove" aria-hidden="true"></i>
-                </a>
+                <div style="float:right" class="_normal">
+                    <span class="glyphicon glyphicon-remove remove" aria-hidden="true" ng-click="onRemoveApplicationName($event)"></span>
+                </div>
+                <div style="float:right" class="_remove hide-me">
+                    <span class="glyphicon glyphicon-remove remove" aria-hidden="true" ng-click="onCancelRemoveApplicationName()"></span>
+                    <span class="glyphicon glyphicon-ok edit-confirm" aria-hidden="true" ng-click="onApplyRemoveApplicationName(app.applicationName)"></span>
+                </div>
             </li>
 		</ul>
 	</div>
+    <div class="some-loading">
+        <div class="timer-loader"></div>
+    </div>
+    <div class="some-alert hide-me">
+        <span class="message"></span>
+        <span class="close-alert" style="color:#FFF;" ng-click="onCloseAlert()">X</span>
+    </div>
 </div>
