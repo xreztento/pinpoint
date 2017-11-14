@@ -385,6 +385,8 @@
                         });
                     };
 
+
+
                     /**
                      * get query start time
                      * @returns {*}
@@ -535,6 +537,20 @@
                             }
                         }, 1000);
                     };
+
+
+                    scope.$on("applicationList.reload", function(){
+
+                        scope.applications = [
+                            {
+                                text: 'Loading...',
+                                value: ''
+                            }
+                        ];
+                        initializeApplication();
+                        initializeDateTimePicker();
+                        getApplicationList();
+                    });
 
 
                     /**
